@@ -201,6 +201,7 @@ ip addr add $ip broadcast $brd dev $dev
 ip route add default via $gateway
 EOF
 
+	mkdir -p /var/run/runit/runsvdir/current
 	ln -s /etc/sv/dropbear /var/service/
 }
 
