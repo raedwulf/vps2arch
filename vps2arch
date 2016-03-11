@@ -99,6 +99,10 @@ save_root_pass() {
 	chmod 0600 "/root.$cpu_type/root.passwd"
 }
 
+backup_old_files() {
+	cp -fL /etc/hostname /etc/localtime "/root.$cpu_type/etc/" || true
+}
+
 delete_all() {
 	# Remove immutable flag from any files / directories
 	if command -v chattr >/dev/null 2>&1; then
@@ -240,6 +244,9 @@ finalize() {
 		fi
 	fi
 
+	# Enable SSH login for user root (#3)
+	sed -i '/^#PermitRootLogin\s/s/.*/&\nPermitRootLogin yes/' /etc/ssh/sshd_config
+
 	cat <<-EOF
 		Hi,
 		your VM has successfully been reimaged with Arch Linux.
@@ -290,7 +297,7 @@ while getopts ":b:m:n:h" opt; do
 			    -h                           Print this help message
 
 			    Warning:
-			      On OpenVZ containers the bootloader will be not installed and the networking configuration system will be enfoced to netctl.
+			      On OpenVZ containers the bootloader will be not installed and the networking configuration system will be enforced to netctl.
 		EOF
 		exit 0
 		;;
@@ -317,6 +324,7 @@ cd /
 download_and_extract_bootstrap
 configure_chroot
 save_root_pass
+backup_old_files
 delete_all
 install_packages
 restore_root_pass
