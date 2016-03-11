@@ -105,7 +105,7 @@ install_packages() {
 	[ "$bootloader" = "syslinux" ] && packages="$packages gptfdisk"
 	# Black magic!
 	"/root.$cpu_type/usr/lib"/ld-*.so --library-path "/root.$cpu_type/usr/lib" \
-		"/root.$cpu_type/usr/bin/chroot" "/root.$cpu_type" /usr/bin/xbps-install -S -R http://repo3.voidlinux.eu/current -r /mnt $packages
+		"/root.$cpu_type/usr/bin/chroot" "/root.$cpu_type" /usr/bin/xbps-install -Sy -R http://repo3.voidlinux.eu/current -r /mnt $packages
 	cp -L "/root.$cpu_type/etc/resolv.conf" /etc
 }
 
