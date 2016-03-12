@@ -177,7 +177,7 @@ configure_bootloader() {
 	fi
 
 	chown root:root /
-	chown 755 /
+	chmod 755 /
 }
 
 configure_network() {
@@ -202,7 +202,9 @@ ip route add default via $gateway
 EOF
 
 	mkdir -p /var/run/runit/runsvdir/current
-	ln -s /etc/sv/dropbear /var/service/
+	ln -sf /var/service /var/run/runit/runsvdir/current
+	ln -sf /etc/sv/dropbear /var/service/dropbear
+	ln -sf /etc/sv/dhcpcd /var/service/dhcpcd
 }
 
 finalize() {
